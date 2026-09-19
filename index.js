@@ -17,9 +17,9 @@ const HEARTBEAT_DELAY = 10000;
 
 const server = http.createServer((req, res) => {
 
-    // ----------------------------------------------
+    // ==================================================
     // HEARTBEAT REÇU
-    // ----------------------------------------------
+    // ==================================================
 
     if (req.url === "/heartbeat") {
 
@@ -37,7 +37,10 @@ const server = http.createServer((req, res) => {
             from: "HEARTBEAT-SERVER"
         }));
 
-        // Répondre après 10 secondes
+        console.log(
+            `⏱️ Prochain heartbeat vers DAVID BOT dans ${HEARTBEAT_DELAY / 1000}s`
+        );
+
         setTimeout(() => {
             sendHeartbeatToDavidBot();
         }, HEARTBEAT_DELAY);
@@ -45,9 +48,9 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    // ----------------------------------------------
+    // ==================================================
     // PAGE PRINCIPALE
-    // ----------------------------------------------
+    // ==================================================
 
     if (req.url === "/") {
 
@@ -62,9 +65,9 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    // ----------------------------------------------
+    // ==================================================
     // 404
-    // ----------------------------------------------
+    // ==================================================
 
     res.writeHead(404, {
         "Content-Type": "text/plain; charset=utf-8"
@@ -74,16 +77,10 @@ const server = http.createServer((req, res) => {
 });
 
 // ==================================================
-// ENVOI HEARTBEAT
+// ENVOI HEARTBEAT → DAVID BOT
 // ==================================================
 
-let heartbeatStarted = false;
-
 async function sendHeartbeatToDavidBot() {
-
-    if (!heartbeatStarted) {
-        heartbeatStarted = true;
-    }
 
     try {
 
@@ -100,6 +97,7 @@ async function sendHeartbeatToDavidBot() {
             throw new Error(
                 `HTTP ${response.status}`
             );
+
         }
 
         const data = await response.json();
@@ -112,11 +110,14 @@ async function sendHeartbeatToDavidBot() {
     } catch (error) {
 
         console.error(
-            "❌ Heartbeat vers DAVID BOT :",
+            "❌ Erreur heartbeat → DAVID BOT :",
             error.message
         );
 
-        // Réessayer plus tard
+        console.log(
+            "🔄 Nouvelle tentative dans 30 secondes..."
+        );
+
         setTimeout(() => {
             sendHeartbeatToDavidBot();
         }, 30000);
@@ -124,7 +125,7 @@ async function sendHeartbeatToDavidBot() {
 }
 
 // ==================================================
-// DÉMARRAGE
+// DÉMARRAGE SERVEUR
 // ==================================================
 
 server.listen(
@@ -139,6 +140,15 @@ server.listen(
         console.log(
             `🌐 Port : ${PORT}`
         );
+
+        console.log(
+            "⏱️ Premier heartbeat vers DAVID BOT dans 5 secondes..."
+        );
+
+        // Premier heartbeat
+        setTimeout(() => {
+            sendHeartbeatToDavidBot();
+        }, 5000);
 
     }
 );
