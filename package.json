@@ -1,0 +1,9 @@
+{
+  "name": "david-bot-heartbeat",
+  "version": "1.0.0",
+  "description": "Heartbeat server for DAVID BOT",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  }
+}
