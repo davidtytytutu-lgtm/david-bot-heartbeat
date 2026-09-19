@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 10000;
 const DAVID_BOT_URL =
     "https://david-bot-l5up.onrender.com/heartbeat";
 
-const HEARTBEAT_DELAY = 1000;
+const HEARTBEAT_DELAY = 5000;
 
 // ==================================================
 // SERVEUR HTTP
